@@ -25,4 +25,19 @@ router.get('/twitter/*', function (req, res, next) {
     })
 })
 
+router.post('/twitter/*', function (req, res, next) {
+  if (req.session && !req.session.oauth) {
+    res.status(401).send('unauthorized')
+  }
+  client(req).post(req.params['0'], req.body)
+    .then(response => {
+      res.json(response)
+    })
+    .catch(err => {
+      console.log(err)
+      next(err)
+    })
+})
+
+
 module.exports = router
